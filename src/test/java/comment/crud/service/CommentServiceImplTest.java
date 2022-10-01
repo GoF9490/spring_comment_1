@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,20 +25,39 @@ class CommentServiceImplTest {
     @Test
     public void writeComment() {
 
-        // when
-        Long id = service.createComment("admin", "hello world");
+        //given
+        Comment comment = new Comment();
+        comment.setWriter("admin");
+        comment.setContent("hello world");
 
-        // then
+        //when
+        Long id = service.createComment(comment);
+
+        //then
         assertThat(id).isEqualTo(1);
+
+        Optional<Comment> admin = repository.findByWriter("admin");
+        assertThat(admin.get().getContent()).isEqualTo("hello world");
     }
 
     @Test
     public void readAllComment() {
 
         //given
-        service.createComment("admin", "hello world");
-        service.createComment("admin", "hello");
-        service.createComment("writer", "world");
+        Comment comment1 = new Comment();
+        comment1.setWriter("admin");
+        comment1.setContent("hello");
+        repository.save(comment1);
+
+        Comment comment2 = new Comment();
+        comment2.setWriter("writer");
+        comment2.setContent("world");
+        repository.save(comment2);
+
+        Comment comment3 = new Comment();
+        comment3.setWriter("admin");
+        comment3.setContent("hello world");
+        repository.save(comment3);
 
         //when
         List<Comment> list = service.readAllComment();
@@ -50,17 +70,30 @@ class CommentServiceImplTest {
     public void updateComment() {
 
         //given
-        service.createComment("admin", "hello world");
-        service.createComment("admin", "hello");
-        Long id = service.createComment("writer", "world");
+        Comment comment1 = new Comment();
+        comment1.setWriter("admin");
+        comment1.setContent("hello");
+        repository.save(comment1);
+
+        Comment comment2 = new Comment();
+        comment2.setWriter("writer");
+        comment2.setContent("world");
+        repository.save(comment2);
+
+        Comment comment3 = new Comment();
+        comment3.setWriter("admin");
+        comment3.setContent("hello world");
+        repository.save(comment3);
+
+        comment2.setContent("welcome");
 
         //when
-        Long update = service.updateComment(id, "welcome");
+        Long update = service.updateComment(comment2);
 
         //then
-        assertThat(update).isEqualTo(3);
+        assertThat(update).isEqualTo(2);
 
-        Comment comment = repository.findById(id).get();
+        Comment comment = repository.findById(2L).get();
         assertThat(comment.getWriter()).isEqualTo("writer");
         assertThat(comment.getContent()).isEqualTo("welcome");
     }
@@ -69,17 +102,28 @@ class CommentServiceImplTest {
     public void deleteComment() {
 
         //given
-        service.createComment("admin", "hello world");
-        service.createComment("admin", "hello");
-        Long id = service.createComment("writer", "world");
+        Comment comment1 = new Comment();
+        comment1.setWriter("admin");
+        comment1.setContent("hello");
+        repository.save(comment1);
+
+        Comment comment2 = new Comment();
+        comment2.setWriter("writer");
+        comment2.setContent("world");
+        repository.save(comment2);
+
+        Comment comment3 = new Comment();
+        comment3.setWriter("admin");
+        comment3.setContent("hello world");
+        repository.save(comment3);
 
         //when
-        Long delete = service.deleteComment(id);
+        Long delete = service.deleteComment(comment2);
 
         //then
-        assertThat(delete).isEqualTo(3);
+        assertThat(delete).isEqualTo(2);
 
-        Comment comment = repository.findById(id).get();
+        Comment comment = repository.findById(2L).get();
         assertThat(comment.getDeleted()).isEqualTo(true);
     }
 }

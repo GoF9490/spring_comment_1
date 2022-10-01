@@ -15,13 +15,8 @@ public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
 
     @Override
-    public Long createComment(String writer, String content) {
-        Comment comment = new Comment();
-
-        comment.setWriter(writer);
-        comment.setContent(content);
+    public Long createComment(Comment comment) {
         commentRepository.save(comment);
-
         return comment.getId();
     }
 
@@ -31,32 +26,15 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Long updateComment(Long id, String content) {
-        Optional<Comment> opt = commentRepository.findById(id);
-
-        if (opt.isPresent()) {
-            Comment comment = opt.get();
-            comment.setContent(content);
-            commentRepository.update(comment);
-
-            return comment.getId();
-        } else {
-            return -1L;
-        }
+    public Long updateComment(Comment comment) {
+        commentRepository.update(comment);
+        return comment.getId();
     }
 
     @Override
-    public Long deleteComment(Long id) {
-        Optional<Comment> opt = commentRepository.findById(id);
-
-        if (opt.isPresent()) {
-            Comment comment = opt.get();
-            comment.setDeleted(true);
-            commentRepository.update(comment);
-
-            return comment.getId();
-        } else {
-            return -1L;
-        }
+    public Long deleteComment(Comment comment) {
+        comment.setDeleted(true);
+        commentRepository.update(comment);
+        return comment.getId();
     }
 }

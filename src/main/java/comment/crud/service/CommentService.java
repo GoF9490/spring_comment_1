@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CommentService {
 
-    Long createComment(String writer, String content);
+    Long createComment(Comment comment);
     List<Comment> readAllComment();
-    Long updateComment(Long id, String content);
-    Long deleteComment(Long id);
+    Long updateComment(Comment comment);
+    Long deleteComment(Comment comment);
 
 }
