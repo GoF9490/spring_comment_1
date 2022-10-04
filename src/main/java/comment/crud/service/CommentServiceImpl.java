@@ -32,9 +32,10 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Long deleteComment(Comment comment) {
+    public Long deleteComment(Long id) {
+        Comment comment = commentRepository.findById(id).get();
         comment.setDeleted(true);
         commentRepository.update(comment);
-        return comment.getId();
+        return id;
     }
 }

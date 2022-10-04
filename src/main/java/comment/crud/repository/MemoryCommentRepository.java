@@ -1,7 +1,10 @@
 package comment.crud.repository;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.*;
 
+@Repository
 public class MemoryCommentRepository implements CommentRepository{
 
     private static Map<Long, Comment> commentBox = new HashMap<>();

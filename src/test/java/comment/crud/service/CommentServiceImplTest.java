@@ -110,7 +110,7 @@ class CommentServiceImplTest {
         Comment comment2 = new Comment();
         comment2.setWriter("writer");
         comment2.setContent("world");
-        repository.save(comment2);
+        Comment save = repository.save(comment2);
 
         Comment comment3 = new Comment();
         comment3.setWriter("admin");
@@ -118,7 +118,7 @@ class CommentServiceImplTest {
         repository.save(comment3);
 
         //when
-        Long delete = service.deleteComment(comment2);
+        Long delete = service.deleteComment(save.getId());
 
         //then
         assertThat(delete).isEqualTo(2);
