@@ -2,7 +2,6 @@ package comment.crud.service;
 
 import comment.crud.repository.Comment;
 import comment.crud.repository.MemoryCommentRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommentServiceImplTest {
 
@@ -124,6 +122,6 @@ class CommentServiceImplTest {
         assertThat(delete).isEqualTo(2);
 
         Comment comment = repository.findById(2L).get();
-        assertThat(comment.getDeleted()).isEqualTo(true);
+        assertThat(comment.getDelete()).isEqualTo(true);
     }
 }

@@ -10,6 +10,6 @@ public class Comment {
     private Long id;
     private String writer;
     private String content;
-    private Boolean deleted = false;
+    private Boolean delete = false;
 
 }

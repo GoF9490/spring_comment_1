@@ -24,14 +24,18 @@
             <td th:text="${comment.id}"></td>
             <td th:text="${comment.writer}"></td>
             <td th:text="${comment.content}"></td>
-            <td>
-                <a th:href="@{/update(id=${comment.id}, writer=${comment.writer}, content=${comment.content})}">변경</a>
+            <td >
+                <th:block th:if="${!comment.delete}">
+                    <a th:href="@{/update(id=${comment.id})}">변경</a>
+                </th:block>
             </td>
             <td>
-                <form name="delete" action="/delete" method="post">
-                    <input type="hidden" name="id" th:value="${comment.id}">
-                    <button type="submit">삭제</button>
-                </form>
+                <th:block th:if="${!comment.delete}">
+                    <form name="delete" action="/delete" method="post">
+                        <input type="hidden" name="id" th:value="${comment.id}">
+                        <button type="submit">삭제</button>
+                    </form>
+                </th:block>
             </td>
         </tr>
         </tbody>

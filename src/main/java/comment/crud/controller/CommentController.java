@@ -36,20 +36,24 @@ public class CommentController {
     }
 
     @GetMapping("/update")
-    public String update(@RequestParam Long id, @RequestParam String writer,
-                         @RequestParam String content, Model model) {
+    public String update(@RequestParam Long id, Model model) {
+        Comment comment = commentService.suchForId(id);
+        // 만약 작성자랑 다르다면 예외처리 추가. (로그인 방식일경우) + 빈 Comment 객체는 작성자가 ""이기에 무조건 다름. 접근 권한이 없습니다 같은 키워드로 튕겨내기.
+        // if (comment.delete) return ""; // 이미 삭제되었을 경우 예외처리.
         model.addAttribute("id", id);
-        model.addAttribute("writer", writer);
-        model.addAttribute("content", content);
+        model.addAttribute("writer", comment.getWriter());
+        model.addAttribute("content", comment.getContent());
+
         return  "update";
     }
 
     @PostMapping("/update")
     public String updateProcess(CommentForm form) {
-        Comment comment = new Comment();
-        comment.setId(Long.parseLong(form.getId()));
-        comment.setWriter(form.getWriter());
-        comment.setContent(form.getContent());
+        Comment comment = commentService.suchForId(Long.parseLong(form.getId()));
+        if (!comment.getDelete()) {
+            comment.setWriter(form.getWriter());
+            comment.setContent(form.getContent());
+        }
 
         commentService.updateComment(comment);
 
@@ -64,6 +68,7 @@ public class CommentController {
         comment.setId(Long.parseLong(form.getId()));
         comment.setWriter("");
         comment.setContent("이 댓글은 삭제되었습니다.");
+        comment.setDelete(true);
 
         commentService.updateComment(comment);
 

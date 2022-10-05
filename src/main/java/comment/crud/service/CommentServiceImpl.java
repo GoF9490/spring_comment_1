@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // 생성자
@@ -26,6 +25,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public Comment suchForId(Long id) {
+        return commentRepository.findById(id).orElse(new Comment());
+    }
+
+    @Override
     public Long updateComment(Comment comment) {
         commentRepository.update(comment);
         return comment.getId();
@@ -34,7 +38,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Long deleteComment(Long id) {
         Comment comment = commentRepository.findById(id).get();
-        comment.setDeleted(true);
+        comment.setDelete(true);
         commentRepository.update(comment);
         return id;
     }
